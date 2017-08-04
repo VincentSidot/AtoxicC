@@ -4,7 +4,7 @@
 
 using byte = unsigned char;
 
-void XOR(void* const input, void* output, size_t size, void* const key, size_t key_len)
+inline void XOR(void* const input, void* output, size_t size, void* const key, size_t key_len)
 {
 	DWORD oldProtec = 0,test = 0;
 	VirtualProtect(output, size, PAGE_READWRITE, &oldProtec);

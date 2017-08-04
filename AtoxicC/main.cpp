@@ -4,7 +4,7 @@
 #include "atoxicc.h"
 
 #define CRYPT
-#define DECRYPT
+//#define DECRYPT
 
 using namespace std; //for test
 

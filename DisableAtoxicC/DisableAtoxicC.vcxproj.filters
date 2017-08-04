@@ -20,16 +20,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="list.h">
+    <ClInclude Include="cracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atoxicc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cryptools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="file.h">
+    <ClInclude Include="XORbruteforce.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
